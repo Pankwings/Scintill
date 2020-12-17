@@ -2,7 +2,6 @@ import numpy as np
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
-# import matplolib.pyplot as plt
 
 # Number of steps the channels in the waveform are separated by.
 CHANNEL_SEPARATION_STEPS = 4
@@ -55,8 +54,11 @@ def filter_channel_data(waveforms,err, start):
         #( For proper signal % error is taken as threshold w.r.t max
         # signal at that 512 trigger. So, it can be change according to our need.)
 
-        thrsld = err*max(abs(waveforms[row]))
         
+        if((abs(max(waveforms[row])))<(abs(min(waveforms[row])))):
+            sign=-1
+        else:
+            sign=1
         # Old version code: thrsld=sign*err*min((waveforms[row]))
         
                 # Iterate through the waveforms and filter signals above the threshold.
@@ -64,12 +66,9 @@ def filter_channel_data(waveforms,err, start):
         for col in waveforms[row]:
             # Waveform was negative to make it positive.
             # NOTE: Add more details.
-            # old code: col = sign*col
-            col = abs(col)
-            if(col > thrsld):                      
-                channel.append(col)
-            else: 
-                channel.append(0) 
+            col = sign*col
+            channel.append(col)
+ 
     #print(pd.DataFrame(channel))
     return channel
 
@@ -79,7 +78,7 @@ def denoising(channel):
     fhat = np.fft.fft(channel,signals)
     PSD = fhat*np.conj(fhat)/signals
     ## Use the PSD to filter out noise
-    indices = PSD > 100       # Find all freqs with large power
+    indices = PSD > 0       # Find all freqs with large power
     fhat = indices * fhat     # Zero out small Fourier coeffs. in Y
     ffilt = np.fft.ifft(fhat) # Inverse FFT for filtered time signal
     return np.real(ffilt)
@@ -140,7 +139,8 @@ def fn_comb( channel, chnm, no_file_read):
     plt.figure(1)
     for i in range(no_file_read):
         plt.plot(avg_channel_one_set[i], label='Biasing Voltage %s' %(6+(0.1*i)))
-    plt.legend()    
+        #plt.savefig('output%i.png'%chnm, dpi=300, bbox_inches='tight')
+    plt.legend()
     plt.show()
     return avg_channel_one_set
 
