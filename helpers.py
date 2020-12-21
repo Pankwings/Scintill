@@ -42,19 +42,15 @@ def load_waveformdata(dir_location, voltage):
     return wd, num_file_read
 
 # waveforms=waveformData[], sign= positive or negative signal err= error condidered start1=
-def filter_channel_data(waveforms,err, start):
+def filter_channel_data(waveforms, start):
     """
     Extract specific channel signals from the given waveforms.
+    and also adjust the waveform in positive signal response.
     """
     channel=[]           
     for row in range(start, len(waveforms), CHANNEL_SEPARATION_STEPS):
-        # Threshold to cancel undesirable signals.
-        # Setting threshold value with "0%" error . 
-        # The "0%" actually means that only positive signal will be used in the study.
-        #( For proper signal % error is taken as threshold w.r.t max
         # signal at that 512 trigger. So, it can be change according to our need.)
-
-        
+ 
         if((abs(max(waveforms[row])))<(abs(min(waveforms[row])))):
             sign=-1
         else:
