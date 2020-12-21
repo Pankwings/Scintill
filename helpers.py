@@ -50,7 +50,8 @@ def filter_channel_data(waveforms, start):
     channel=[]           
     for row in range(start, len(waveforms), CHANNEL_SEPARATION_STEPS):
         # signal at that 512 trigger. So, it can be change according to our need.)
- 
+
+        
         if((abs(max(waveforms[row])))<(abs(min(waveforms[row])))):
             sign=-1
         else:
@@ -114,7 +115,8 @@ def fn_comb( channel, chnm, no_file_read):
         
         #Reading the content from the other .npy file i.e jumping within the same 1D variable after 512000 index. 
         avg_channel_one_set[num] = comb
-
+    print_avg_signal( avg_channel_one_set, chnm, no_file_read)
+    return avg_channel_one_set
     
     '''
     # OLD Code:
@@ -130,7 +132,7 @@ def fn_comb( channel, chnm, no_file_read):
         for i in range(512):
             comb1[i]=comb1[i]/1000 #averaging the signal of the channel(1000 trigger in a channel)
     '''    
-    
+def print_avg_signal( avg_channel_one_set, chnm, no_file_read):
     plt.title('Average of signal of channel %i (Averaging of all signal of the channel)' %chnm) 
     plt.figure(1)
     for i in range(no_file_read):
@@ -138,5 +140,5 @@ def fn_comb( channel, chnm, no_file_read):
         #plt.savefig('output%i.png'%chnm, dpi=300, bbox_inches='tight')
     plt.legend()
     plt.show()
-    return avg_channel_one_set
+
 
