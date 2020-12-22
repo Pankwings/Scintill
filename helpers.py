@@ -9,6 +9,7 @@ CHANNEL_SEPARATION_STEPS = 4
 DATA_COLUMN_SIZE = 512
 # Index of the array that contains the actual data.
 DATA_INDEX = 6
+X_AXIS = np.arange(0,512,1)
 
 def load_waveformdata(dir_location, voltage):
     """
@@ -116,6 +117,7 @@ def fn_comb( channel, chnm, no_file_read):
         #Reading the content from the other .npy file i.e jumping within the same 1D variable after 512000 index. 
         avg_channel_one_set[num] = comb
     print_avg_signal( avg_channel_one_set, chnm, no_file_read)
+    print_zoom_signal( avg_channel_one_set, chnm, no_file_read)
     return avg_channel_one_set
     
     '''
@@ -136,9 +138,22 @@ def print_avg_signal( avg_channel_one_set, chnm, no_file_read):
     plt.title('Average of signal of channel %i (Averaging of all signal of the channel)' %chnm) 
     plt.figure(1)
     for i in range(no_file_read):
+        #avg_channel_one_set[i] = np.ma.masked_outside(250, 350).mask
         plt.plot(avg_channel_one_set[i], label='Biasing Voltage %s' %(6+(0.1*i)))
         #plt.savefig('output%i.png'%chnm, dpi=300, bbox_inches='tight')
     plt.legend()
     plt.show()
 
+def print_zoom_signal( avg_channel_one_set, chnm, no_file_read):
+    
+    plt.title('Average of signal of channel %i (Averag)' %chnm) 
+    plt.figure(1)
+    for i in range(no_file_read):
+        
+        #if((abs(max(avg_channel_one_set[i])))>(0.02*abs(max(avg_channel_one_set[i])))):
+        plt.plot(avg_channel_one_set[i], label='Biasing Voltage %s' %(6+(0.1*i)))
+        plt.xlim([230,350])
+        #plt.savefig('output%i.png'%chnm, dpi=300, bbox_inches='tight')
+    plt.legend()
+    plt.show()
 
