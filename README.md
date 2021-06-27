@@ -1,1 +1,1 @@
-This repository have the most current updates on my current work. This repository may contains some unwanted files in the starting stage but I will improve the repositary with time, along with more details.
+This repository have the most current updates on my current work. 
